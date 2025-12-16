@@ -566,6 +566,7 @@
         <div class="thank-you-header">
             <i class="fas fa-check-circle"></i>
             <h1 id="thankYouTitle">Thank You!</h1>
+            <p id="contactTimeline" class="contact-timeline">Our team will contact you within 24 hours</p>
             <p id="thankYouMessage">Your request has been submitted successfully. Our team will contact you shortly.</p>
             <button class="btn" id="closeThankYou">Close</button>
         </div>
@@ -743,7 +744,18 @@
     <script>
         // Capture UTM parameters from URL on page load
         (function() {
+            console.log('🚀 UTM Tracking Script Initialized');
+            console.log('📍 Full URL:', window.location.href);
+            console.log('🔗 Query String:', window.location.search);
+            
             const urlParams = new URLSearchParams(window.location.search);
+            
+            // Log all URL parameters
+            console.log('📊 All URL Parameters:');
+            for (let [key, value] of urlParams.entries()) {
+                console.log(`  - ${key}: ${value}`);
+            }
+            
             const utmData = {
                 gclid: urlParams.get('gclid') || '',
                 utm_source: urlParams.get('utm_source') || '',
@@ -758,10 +770,32 @@
             // Store in sessionStorage for the entire session
             sessionStorage.setItem('utmData', JSON.stringify(utmData));
             
-            // Debug log (shows if any UTM parameters were found)
-            if (Object.values(utmData).some(val => val !== '')) {
-                console.log('🎯 UTM Data Captured:', utmData);
+            // Comprehensive debug logging
+            console.log('🎯 UTM Tracking Data Captured:');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🔑 GCLID:', utmData.gclid || '❌ NOT FOUND');
+            console.log('📱 Source:', utmData.utm_source || '❌ NOT FOUND');
+            console.log('📢 Medium:', utmData.utm_medium || '❌ NOT FOUND');
+            console.log('🎪 Campaign:', utmData.utm_campaign || '❌ NOT FOUND');
+            console.log('🔍 Term:', utmData.utm_term || '❌ NOT FOUND');
+            console.log('📝 Content:', utmData.utm_content || '❌ NOT FOUND');
+            console.log('🔙 Referrer:', utmData.referrer || 'Direct Visit');
+            console.log('🌐 Landing Page:', utmData.landing_page);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            
+            // Highlight GCLID status
+            if (utmData.gclid) {
+                console.log('%c✅ GCLID SUCCESSFULLY CAPTURED!', 'color: green; font-weight: bold; font-size: 14px;');
+                console.log('%cGCLID Value: ' + utmData.gclid, 'color: green; font-size: 12px;');
+            } else {
+                console.log('%c⚠️ GCLID NOT FOUND IN URL', 'color: orange; font-weight: bold; font-size: 14px;');
+                console.log('%cThis is normal if not coming from Google Ads', 'color: orange; font-size: 11px;');
             }
+            
+            // Store for easy access
+            window.utmData = utmData;
+            console.log('💾 UTM data saved to sessionStorage and window.utmData');
+            console.log('🔧 To check anytime, type: window.utmData or sessionStorage.getItem("utmData")');
         })();
     </script>
     
@@ -1000,8 +1034,14 @@
                     if (titleElement) {
                         titleElement.textContent = `Thank You, ${formData.name}!`;
                     }
+                    
+                    const timelineElement = document.getElementById('contactTimeline');
+                    if (timelineElement) {
+                        timelineElement.textContent = 'Our team will contact you within 24 hours';
+                    }
+                    
                     if (messageElement) {
-                        messageElement.textContent = `Your request for a Virtual Office in ${formData.city} has been submitted successfully. Our team will contact you within 24 hours at ${formData.email} or ${formData.phone}.`;
+                        messageElement.innerHTML = `Your request for a Virtual Office in <strong>${formData.city}</strong> has been submitted successfully. You will be contacted at <strong>${formData.email}</strong> or <strong>${formData.phone}</strong>.`;
                     }
                     
                     // Reset form
