@@ -1849,6 +1849,26 @@ body {
     margin-right: auto;
 }
 
+#thankYouMessage {
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFEAA7 100%);
+    border-left: 4px solid #F2BF0E;
+    padding: 20px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(242, 191, 14, 0.2);
+    font-weight: 500;
+    color: #2d3436;
+    animation: highlightPulse 2s ease-in-out infinite;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(242, 191, 14, 0.2);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(242, 191, 14, 0.4);
+    }
+}
+
 .thank-you-header button {
     margin-top: 5px;
 }
