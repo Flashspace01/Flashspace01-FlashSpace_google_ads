@@ -1,0 +1,9 @@
+{
+  "name": "flashspace-frontend",
+  "version": "1.0.0",
+  "description": "FlashSpace Virtual Office Landing Page - Frontend",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "preview": "python -m http.server 8080"
+  }
+}
