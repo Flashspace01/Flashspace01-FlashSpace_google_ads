@@ -747,13 +747,39 @@
             console.log('🚀 UTM Tracking Script Initialized');
             console.log('📍 Full URL:', window.location.href);
             console.log('🔗 Query String:', window.location.search);
+            console.log('🌍 Environment:', window.location.hostname);
             
-            const urlParams = new URLSearchParams(window.location.search);
+            // Try multiple methods to parse URL params (production-safe)
+            let urlParams;
+            try {
+                // Primary method
+                urlParams = new URLSearchParams(window.location.search);
+            } catch (e) {
+                console.error('⚠️ URLSearchParams failed, using fallback');
+                // Fallback parsing method
+                const params = {};
+                const queryString = window.location.search.substring(1);
+                const pairs = queryString.split('&');
+                for (let i = 0; i < pairs.length; i++) {
+                    const pair = pairs[i].split('=');
+                    if (pair[0]) {
+                        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                    }
+                }
+                urlParams = {
+                    get: (key) => params[key] || null,
+                    entries: () => Object.entries(params)
+                };
+            }
             
             // Log all URL parameters
             console.log('📊 All URL Parameters:');
-            for (let [key, value] of urlParams.entries()) {
-                console.log(`  - ${key}: ${value}`);
+            try {
+                for (let [key, value] of urlParams.entries()) {
+                    console.log(`  - ${key}: ${value}`);
+                }
+            } catch (e) {
+                console.log('  - (Unable to enumerate parameters)');
             }
             
             const utmData = {
@@ -796,6 +822,23 @@
             window.utmData = utmData;
             console.log('💾 UTM data saved to sessionStorage and window.utmData');
             console.log('🔧 To check anytime, type: window.utmData or sessionStorage.getItem("utmData")');
+            
+            // Add global debug helper
+            window.checkUTM = function() {
+                const stored = JSON.parse(sessionStorage.getItem('utmData') || '{}');
+                console.table({
+                    'GCLID': stored.gclid || 'Not Found',
+                    'Source': stored.utm_source || 'Not Found',
+                    'Medium': stored.utm_medium || 'Not Found',
+                    'Campaign': stored.utm_campaign || 'Not Found',
+                    'Term': stored.utm_term || 'Not Found',
+                    'Content': stored.utm_content || 'Not Found',
+                    'Referrer': stored.referrer || 'Direct',
+                    'Landing Page': stored.landing_page || 'N/A'
+                });
+                return stored;
+            };
+            console.log('📋 Run window.checkUTM() to see tracking data in a table');
         })();
     </script>
     
