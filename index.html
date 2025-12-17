@@ -1066,31 +1066,35 @@
                 console.log('📨 Backend response:', result);
                 
                 if (result.success) {
-                    // Close modal and show thank you page
-                    modal.style.display = 'none';
-                    thankYouPage.style.display = 'flex';
+                    // Store user data in sessionStorage for thank you page
+                    const thankYouData = {
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        city: formData.city,
+                        company: formData.company,
+                        timestamp: new Date().toISOString()
+                    };
                     
-                    // Update thank you page with user's name
-                    const titleElement = document.getElementById('thankYouTitle');
-                    const messageElement = document.getElementById('thankYouMessage');
+                    sessionStorage.setItem('thankYouData', JSON.stringify(thankYouData));
+                    console.log('💾 Stored thank you data:', thankYouData);
                     
-                    if (titleElement) {
-                        titleElement.textContent = `Thank You, ${formData.name}!`;
-                    }
-                    
-                    const timelineElement = document.getElementById('contactTimeline');
-                    if (timelineElement) {
-                        timelineElement.textContent = 'Our team will contact you within 24 hours';
-                    }
-                    
-                    if (messageElement) {
-                        messageElement.innerHTML = `Your request for a Virtual Office in <strong>${formData.city}</strong> has been submitted successfully. You will be contacted at <strong>${formData.email}</strong> or <strong>${formData.phone}</strong>.`;
+                    // Track form submission in GTM before redirect
+                    if (window.dataLayer) {
+                        window.dataLayer.push({
+                            'event': 'form_submission',
+                            'form_name': 'Virtual Office Request',
+                            'user_city': formData.city
+                        });
                     }
                     
                     // Reset form
                     resetForm();
                     
-                    console.log('✅ Form submitted successfully!');
+                    console.log('✅ Form submitted successfully! Redirecting to thank you page...');
+                    
+                    // Redirect to thank you page
+                    window.location.href = '/thankyou.html';
                 } else {
                     alert('❌ Error: ' + (result.message || 'Failed to submit form'));
                     console.error('Server error:', result);
