@@ -60,9 +60,9 @@
                 <div class="hero-text">
                     <h1 class="hero-title">Get a Legit <span class="highlight">Virtual Office Anywhere in India</span> — Starting at <br> Rs. 699/Month</h1>
                     <p class="hero-description">Reliable Virtual Offices starting at ₹699/month (billed annually) across 20+ states, complete with GST/MCA-compliant documentation, mail handling, and a 100% Refund Guarantee.</p>
-                    <a href="#schedule" class="btn btn-primary">
+                    <button class="btn btn-primary" id="openFormBtnHero">
                         Get Your Virtual Office Now <i class="fas fa-arrow-right"></i>
-                    </a>
+                    </button>
                     
                     <!-- Social Proof -->
                     <div class="social-proof">
@@ -848,6 +848,7 @@
         const modal = document.getElementById('formModal');
         const openBtn = document.getElementById('openFormBtn');
         const openBtnHeader = document.getElementById('openFormBtnHeader');
+        const openBtnHero = document.getElementById('openFormBtnHero');
         const closeBtn = document.querySelector('.close-modal');
         const form = document.getElementById('contactForm');
         const thankYouPage = document.getElementById('thankYouPage');
@@ -873,6 +874,7 @@
 
         openBtn.onclick = openModal;
         openBtnHeader.onclick = openModal;
+        openBtnHero.onclick = openModal;
 
         closeBtn.onclick = () => {
             modal.style.display = 'none';
